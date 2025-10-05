@@ -3,6 +3,9 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     return LaunchDescription([
-        Node(package='robot_behaviour', executable='obstacle_avoidance', name='obstacle_avoid'),
-        Node(package='robot_behaviour', executable='fsm_controller', name='fsm_controller'),
+        Node(
+            package='robot_behaviour',
+            executable='obstacle_avoidance',
+            name='obstacle_avoidance_node'
+        ),
     ])
