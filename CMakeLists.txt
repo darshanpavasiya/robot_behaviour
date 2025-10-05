@@ -1,18 +1,13 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.8)
 project(robot_behaviour)
 
-# Find dependencies
-find_package(ament_cmake REQUIRED)
-find_package(ament_cmake_python REQUIRED)
-find_package(rclpy REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(sensor_msgs REQUIRED)
 
-# Install Python package
-ament_python_install_package(${PROJECT_NAME})
+add_executable(obstacle_avoidance src/obstacle_avoidance.cpp)
+ament_target_dependencies(obstacle_avoidance rclcpp sensor_msgs)
 
-# Install launch files
-install(
-  DIRECTORY launch
-  DESTINATION share/${PROJECT_NAME}
-)
+install(TARGETS obstacle_avoidance
+  DESTINATION lib/${PROJECT_NAME})
 
 ament_package()
