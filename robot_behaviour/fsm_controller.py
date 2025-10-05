@@ -5,14 +5,13 @@ from geometry_msgs.msg import Twist
 from std_srvs.srv import Trigger
 from sensor_msgs.msg import LaserScan
 import numpy as np
+import math
 from enum import Enum
 
 class State(Enum):
     IDLE = 0
     EXPLORING = 1
     AVOIDING = 2
-    GOAL_SEEK = 3
-    RECOVER = 4
 
 class FSMController(Node):
     def __init__(self):
@@ -48,47 +47,32 @@ class FSMController(Node):
         self.latest_min_dist = sector.min()
 
     def timer_cb(self):
-        # State machine evaluation
         min_dist = self.get_parameter('min_dist').value
         twist = Twist()
 
         if self.state == State.IDLE:
-            # publish zeros
-            twist.linear.x = 0.0; twist.angular.z = 0.0
+            twist.linear.x = 0.0
+            twist.angular.z = 0.0
 
         elif self.state == State.EXPLORING:
             if self.latest_min_dist < min_dist:
                 self.get_logger().info('Transition to AVOIDING (obstacle).')
                 self.state = State.AVOIDING
             else:
-                # simple forward and mild oscillation
                 twist.linear.x = 0.12
                 twist.angular.z = 0.06 * math.sin(self.explore_turn)
                 self.explore_turn += 0.2
 
         elif self.state == State.AVOIDING:
-            # short avoidance behavior: rotate until clear
             twist.linear.x = 0.0
             twist.angular.z = 0.7
             if self.latest_min_dist > (min_dist + 0.15):
                 self.get_logger().info('Path clear: back to EXPLORING.')
                 self.state = State.EXPLORING
 
-        elif self.state == State.GOAL_SEEK:
-            # placeholder for goal seeking
-            twist.linear.x = 0.1
-
-        elif self.state == State.RECOVER:
-            # back up and rotate
-            twist.linear.x = -0.08
-            twist.angular.z = 0.8
-            # after some cycles we go back to exploring
-            self.state = State.EXPLORING
-
         self.cmd_pub.publish(twist)
 
 def main(args=None):
-    import math
     rclpy.init(args=args)
     node = FSMController()
     try:

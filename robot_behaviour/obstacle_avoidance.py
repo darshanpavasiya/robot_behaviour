@@ -20,14 +20,12 @@ class ObstacleAvoidNode(Node):
         ranges = np.nan_to_num(ranges, nan=1e3, posinf=1e3, neginf=1e3)
         n = len(ranges)
         mid = n // 2
-        # define front sector (approx ±20°)
         sector_width = int(max(5, n * 20 // 360))
         sector = ranges[mid-sector_width: mid+sector_width+1] if n>2*sector_width else ranges
         min_front = sector.min()
         twist = Twist()
         min_dist = self.get_parameter('min_dist').value
         if min_front < min_dist:
-            # obstacle detected: rotate in place
             twist.linear.x = 0.0
             twist.angular.z = self.get_parameter('rot_speed').value
             self.get_logger().debug(f'Obstacle detected: min_front={min_front:.2f}')
