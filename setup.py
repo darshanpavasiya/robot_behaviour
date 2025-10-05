@@ -5,7 +5,7 @@ package_name = 'robot_behaviour'
 setup(
     name=package_name,
     version='0.1.0',
-    packages=[package_name],
+    packages=[package_name],   # must match folder name exactly
     data_files=[
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
@@ -21,8 +21,6 @@ setup(
     entry_points={
         'console_scripts': [
             'obstacle_avoidance = robot_behaviour.obstacle_avoidance:main',
-            'fsm_controller = robot_behaviour.fsm_controller:main',
-            'teleop_simple = robot_behaviour.teleop_simple:main',
         ],
     },
 )
