@@ -2,20 +2,16 @@
 <package format="3">
   <name>robot_behaviour</name>
   <version>0.1.0</version>
-  <description>Simple ROS2 package for obstacle avoidance and FSM behaviour</description>
+  <description>Simple robot behaviour package (obstacle avoidance + FSM)</description>
   <maintainer email="student@example.com">Student</maintainer>
   <license>MIT</license>
 
-  <buildtool_depend>ament_python</buildtool_depend>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>ament_cmake_python</buildtool_depend>
 
   <depend>rclpy</depend>
-  <depend>geometry_msgs</depend>
-  <depend>sensor_msgs</depend>
-  <depend>nav_msgs</depend>
 
-  <exec_depend>launch</exec_depend>
-  <exec_depend>launch_ros</exec_depend>
-
-  <test_depend>ament_lint_auto</test_depend>
-  <test_depend>ament_lint_common</test_depend>
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
 </package>
